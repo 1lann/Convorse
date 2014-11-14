@@ -1,0 +1,28 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  margin-bottom: 135px;
+}
+footer {
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 120px;
+}
+footer .glyphicon-heart {
+  position: relative;
+  top: 3px;
+}
+footer #fork-me {
+  display: block;
+  margin-top: 5px;
+}
+footer small {
+  font-size: 18px;
+  font-weight: 200;
+  color: #999999;
+}
