@@ -1,0 +1,29 @@
+Database Structure
+
+Collections:
+	users
+		username
+		email
+		password hash x2 + static salt
+	message
+		id
+		content
+	message-link
+		username
+		message-id
+
+message: {
+	id: "1",
+	content: "Hello"
+}
+
+message-link: {
+	{
+	id: "1",
+	username:"1lann"
+	},
+	{
+	id: "1",
+	username:"gravityscore"
+	},
+}

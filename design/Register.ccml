@@ -1,0 +1,44 @@
+<!DOCTYPE ccml>
+<html>
+	<head>
+		<title>Quest Host</title>
+
+			<meta name="description" content="Quest Host is the easiest way to make your own basic website for Quest.">
+			<meta name="keywords" content="quest,host,qst,domain,hosting">
+				</head>
+	</head>
+
+	<body bgcolour="grey">
+			<div height="3" bgcolour="white">
+			<div></div>
+			<float>
+				<div width="1"></div>
+				<a href="/" width="10" ulcolor="white">
+					<float width="10">
+						<p colour="blue" width="6">Quest </p>
+						<p colour="red" width="4">Host</p>
+					</float>
+				</a>
+<div width="33"></div><a href="/login.php" align="center" ulcolor="white" width="7">Login</a>
+			</float>
+		</div>		<div height="2"></div>
+		<center>
+			<div width="40" bgcolour="white">
+				<div height="2"></div>
+		<h color="blue">Quest Host</h>
+		<br>
+		<center>
+			<p width="36" align="center">
+				Quest Host allows everyone to easily host a static CCML web site for Quest. You are given your own .qst domain name and can upload your own images, scripts and CCML.
+			</p>
+
+			<p width="36" align="center" colour="red">
+				For security reasons you can not use languages such as PHP. You need to host your site off your own server for that.
+			</p>
+		</center>
+
+				<div height="2"></div>
+			</div>
+		</center>
+	</body>
+</html>

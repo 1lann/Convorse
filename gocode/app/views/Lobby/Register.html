@@ -1,0 +1,41 @@
+{{set . "title" "Register"}}
+{{append . "moreStyles" "lobby.css"}}
+{{template "header.html" .}}
+
+<body>
+    <div id="top-bar">
+        <h1>Convorse</h1>
+        <h2 class="center-text">Messaging Reimagined for ComputerCraft</h2>
+    </div>
+    <div class="container">
+        <h3 class="center-text">Register a new account</h3>
+        <form class="form-horizontal" role="form" action="home" method="post">
+            <div id="form-area" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+                <div class="form-group form-group-lg">
+                    <input type="text" value="" placeholder="Username" class="form-control" required>
+                </div>
+                <div class="form-group form-group-lg">
+                    <input type="email" value="" placeholder="Email (Optional)" class="form-control">
+                </div>
+                <div class="form-group form-group-lg">
+                    <input type="password" value="" placeholder="Password" class="form-control" required>
+                </div>
+                <div class="form-group form-group-lg">
+                    <input type="password" value="" placeholder="Password Again" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-block btn-lg btn-info btn-fill" value="Register">
+                </div>
+                <div class="form-group">
+                    <a href="/">Already have an account?</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <hr>
+        <small>Made with <span class="glyphicon glyphicon-heart"></span> by 1lann and MagneticHamster</small><br>
+        <small id="fork-me"><a href="https://github.com/1lann/Convorse" target="_blank">Fork me on GitHub</a></small>
+    </footer>
+</body>
+</html>
