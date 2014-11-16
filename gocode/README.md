@@ -6,7 +6,7 @@ A high-productivity web framework for the [Go language](http://www.golang.org/).
 
 ### Start the web server:
 
-    revel run myapp
+    revel run convorse
 
    Run with <tt>--help</tt> for options.
 
@@ -22,7 +22,6 @@ The default directory structure of a generated Revel application:
       app               App sources
         controllers     App controllers
           init.go       Interceptor registration
-        models          App domain models
         routes          Reverse routes (generated code)
         views           Templates
       tests             Test suites
@@ -34,6 +33,7 @@ The default directory structure of a generated Revel application:
         css             CSS files
         js              Javascript files
         images          Image files
+      database          Database package
 
 app
 
