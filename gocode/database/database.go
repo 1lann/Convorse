@@ -99,6 +99,18 @@ func RegisterAccount(username string, email string, password string) error {
 	return err
 }
 
+func GetEmail(username string) (string, error) {
+	result := Account{}
+	err := accounts.Find(bson.M{"username": username}).One(&result)
+
+	if err != nil && err.Error() == "EOF" {
+		DatabaseConnected = false
+		activeSession.Close()
+	}
+
+	return result.email, err
+}
+
 func Connect() bool {
 	if !isConnecting {
 		isConnecting = true
@@ -132,16 +144,4 @@ func Connect() bool {
 
 func init() {
 	Connect()
-}
-
-func GetEmail(username string) (string, error) {
-	result := Account{}
-	err := accounts.Find(bson.M{"username": username}).One(&result)
-
-	if err != nil && err.Error() == "EOF" {
-		DatabaseConnected = false
-		activeSession.Close()
-	}
-
-	return result.email, err
 }
