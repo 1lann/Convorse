@@ -24,12 +24,12 @@ func (c Lobby) LoginAction(username string, password string) revel.Result {
 
 	accountExists := database.AccountExists(username)
 
-	if accountExists == database.Yes {
+	if accountExists == nil {
 		result := database.VerifyLogin(username, password)
 
-		if (result == database.Yes) {
+		if (result == nil) {
 			return c.RenderText("OK")
-		} else if (result == database.No) {
+		} else if (result == "not found") {
 			c.Validation.Error("Incorrect passsword!").Key("password")
 			c.Validation.Keep()
 			c.FlashParams()
@@ -37,7 +37,7 @@ func (c Lobby) LoginAction(username string, password string) revel.Result {
 		} else {
 			return c.RenderTemplate("errors/database."+c.Request.Format)
 		}
-	} else if accountExists == database.No {
+	} else if accountExists.Error() == "not found" {
 		c.Validation.Error("That user does not exist!").Key("username")
 		c.Validation.Keep()
 		c.FlashParams()
@@ -92,14 +92,14 @@ func (c Lobby) RegisterAction(username string, email string, password string, pa
 
 	exists := database.AccountExists(username)
 
-	if exists == database.No {
+	if exists == "not found" {
 		result := database.RegisterAccount(username, email, password)
-		if result == database.Yes {
+		if result == nil {
 			return c.RenderText("Account created!")
 		} else {
 			return c.RenderTemplate("errors/database."+c.Request.Format)
 		}
-	} else if exists == database.Yes {
+	} else if exists == nil {
 		c.Validation.Error("Username already taken!").Key("username")
 		c.Validation.Keep()
 		c.FlashParams()
