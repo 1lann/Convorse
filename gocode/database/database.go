@@ -50,8 +50,7 @@ const passwordSalt = "convorse-password-salt"
 
 const (
 	Disconnected = "EOF"
-	No = "not found"
-	Yes = nil
+	NotFound = "not found"
 )
 
 type Account struct {
