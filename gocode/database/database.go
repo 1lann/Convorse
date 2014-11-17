@@ -40,13 +40,15 @@ type Account struct {
 type Conversation struct {
  	Id bson.ObjectId `bson:"_id,omitempty"`
 	Members []string
+	Group bool
+	LastUpdate time.Time
 }
 
 type Message struct {
 	ConversationID string
 	Time time.Time
 	Username string
-	System bool
+	SystemMessage bool
 	Content string
 }
 
