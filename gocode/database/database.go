@@ -113,7 +113,7 @@ func GetEmail(username string) (string, error) {
 		activeSession.Close()
 	}
 
-	return result.email, err
+	return result.Email, err
 }
 
 func Connect() bool {
