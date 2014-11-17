@@ -99,7 +99,7 @@ func (c Lobby) RegisterAction(username string, email string, password string, pa
 		} else {
 			return c.RenderTemplate("errors/database."+c.Request.Format)
 		}
-	} else if exists.Error() == nil {
+	} else if exists == nil {
 		c.Validation.Error("Username already taken!").Key("username")
 		c.Validation.Keep()
 		c.FlashParams()
