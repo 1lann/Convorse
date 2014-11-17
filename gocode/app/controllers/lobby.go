@@ -16,12 +16,6 @@ type Lobby struct {
 // }
 
 func (c Lobby) LoginAction(username string, password string) revel.Result {
-	if !database.DatabaseConnected{
-		c.RenderArgs["databaseError"] = database.DatabaseConnected;
-		go database.Connect()
-		return c.RenderTemplate("errors/database."+c.Request.Format)
-	}
-
 	accountExists := database.AccountExists(username)
 
 	if accountExists == database.Yes {
@@ -48,41 +42,19 @@ func (c Lobby) LoginAction(username string, password string) revel.Result {
 }
 
 func (c Lobby) Index() revel.Result {
-	if !database.DatabaseConnected {
-		c.RenderArgs["databaseError"] = database.DatabaseConnected;
-		go database.Connect()
-		return c.RenderTemplate("errors/database."+c.Request.Format)
-	}
-
 	return c.Render()
 }
 
 func (c Lobby) Register() revel.Result {
-	if !database.DatabaseConnected {
-		c.RenderArgs["databaseError"] = database.DatabaseConnected;
-		go database.Connect()
-		return c.RenderTemplate("errors/database."+c.Request.Format)
-	}
-
 	return c.Render()
 }
 
-func (c Lobby) RegisterAction(username string, email string, password string, password_again string) revel.Result {
-	if !database.DatabaseConnected {
-		c.RenderArgs["databaseError"] = database.DatabaseConnected;
-		go database.Connect()
-		return c.RenderTemplate("errors/database."+c.Request.Format)
-	}
-
+func (c Lobby) RegisterAction(username string, password string, password_again string) revel.Result {
 	c.Validation.MinSize(username, 3).Message("Username must be at least 3 characters long")
 	c.Validation.MaxSize(username, 20).Message("Username cannot be longer than 20 characters")
 	c.Validation.MinSize(password, 5).Message("Password must be at least 5 characters long")
 	c.Validation.MaxSize(password, 50).Message("Password cannot be longer than 50 characters")
 	c.Validation.Required(password == password_again).Message("Passwords aren't the same").Key("password")
-
-	if (len(email) > 0) {
-		c.Validation.Email(email).Message("Optional email must be valid")
-	}
 
 	if c.Validation.HasErrors() {
 		c.Validation.Keep()
@@ -93,7 +65,7 @@ func (c Lobby) RegisterAction(username string, email string, password string, pa
 	exists := database.AccountExists(username)
 
 	if exists == database.No {
-		result := database.RegisterAccount(username, email, password)
+		result := database.RegisterAccount(username, password)
 		if result == database.Yes {
 			return c.RenderText("Account created!")
 		} else {
@@ -107,4 +79,17 @@ func (c Lobby) RegisterAction(username string, email string, password string, pa
 	} else {
 		return c.RenderTemplate("errors/database."+c.Request.Format)
 	}
+}
+
+func (c Lobby) checkDatabase() revel.Result {
+	if !database.DatabaseConnected {
+		c.RenderArgs["databaseError"] = database.DatabaseConnected;
+		go database.Connect()
+		return c.RenderTemplate("errors/database."+c.Request.Format)
+	}
+	return nil
+}
+
+func init() {
+	revel.InterceptMethod(Lobby.checkDatabase, revel.BEFORE)
 }

@@ -25,10 +25,6 @@
                     {{if .errors.username}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
                 </div>
                 <div class="form-group form-group-lg">
-                    <input type="email" value="{{.flash.email}}" placeholder="Email (Optional)" name="email" class="form-control {{errorClass "email" .}}">
-                    {{if .errors.email}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
-                </div>
-                <div class="form-group form-group-lg">
                     <input type="password" value="" placeholder="Password" name="password" class="form-control {{errorClass "password" .}}" required>
                     {{if .errors.password}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
                 </div>

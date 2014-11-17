@@ -7,34 +7,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"time"
+	"strconv"
+	"math"
 )
-
-// type Item struct {
-// 	Name string
-// 	Id string
-// 	ImageName string
-// 	Gallery []string
-// 	Category string
-// 	Price float32
-// 	Stock int
-// 	FlagForDelete bool
-// 	Description string
-// }
-//
-// type ItemDBManager struct {
-// 	all map[string]*Item
-// }
-//
-// var ItemDB ItemDBManager
-//
-// func (items *ItemDBManager) GetUniqueItemID() string {
-// 	for {
-// 		result := uniuri.NewLen(4)
-// 		if _, exists := items.all[result]; !exists {
-// 			return result
-// 		}
-// 	}
-// }
 
 var accounts *mgo.Collection
 var activeSession *mgo.Session
@@ -46,8 +21,7 @@ const (
 	Yes        = 1
 	No         = 2
 	Error      = 3
-	Username   = 4
-	Password   = 5
+	NotSet     = 4
 )
 
 // I know, know. Constant/static password salts are bad :(
@@ -60,25 +34,107 @@ type Account struct {
 	Username string
 	Email string
 	Hash string
+	Timezone int
+}
+
+type Conversation struct {
+ 	Id bson.ObjectId `bson:"_id,omitempty"`
+	Members []string
+}
+
+type Message struct {
+	ConversationID string
+	Time time.Time
+	Username string
+	System bool
+	Content string
+}
+
+func HumanDateTime(eventTime time.Time, location *time.Location) (string, string) {
+	hour, min, _ := eventTime.Clock()
+	year, month, day := eventTime.Date()
+
+	humanDate := strconv.Itoa(day) + " " + month.String() + " " + strconv.Itoa(year)
+	var humanTime string
+	var stringMin string
+
+	if min < 10 {
+		stringMin = "0" + strconv.Itoa(min)
+	} else {
+		stringMin = strconv.Itoa(min)
+	}
+
+	if hour == 12 {
+		humanTime = "12:" + stringMin + " PM"
+	} else if hour == 0 {
+		humanTime = "12:" + stringMin + " AM"
+	} else if hour > 12 {
+		humanTime = strconv.Itoa(hour - 12) + ":" + stringMin + " PM"
+	} else {
+		humanTime = strconv.Itoa(hour) + ":" + stringMin + " AM"
+	}
+
+	return humanDate, humanTime
+}
+
+func HumanTimeSince(eventTime time.Time, location *time.Location) string {
+	duration := time.Since(eventTime)
+	if duration.Seconds() < 30 {
+		return "just now"
+	} else if duration.Seconds() < 60 {
+		return "less than a minute ago"
+	} else if duration.Minutes() < 60 {
+		if int(duration.Minutes()) == 1 {
+			return "1 minute ago"
+		} else {
+			return (strconv.Itoa(int(math.Floor(duration.Minutes() + 0.5))) + " minutes ago")
+		}
+	} else if duration.Hours() < 5 {
+		if int(duration.Hours()) == 1 {
+			return "1 hour ago"
+		} else {
+			return (strconv.Itoa(int(math.Floor(duration.Hours() + 0.5))) + " hours ago")
+		}
+	} else {
+		_, humanTime := HumanDateTime(eventTime, location)
+		return humanTime
+	}
 }
 
 func AccountExists(username string) int {
 	result := Account{}
 
-	err := accounts.Find(bson.M{"username": username}).One(&result)
-
-	if err != nil {
+	if err := accounts.Find(bson.M{"username": username}).One(&result); err != nil {
 		if err.Error() == "not found" {
 			return No
-		} else if err.Error() == "EOF" {
+		} else if isDisconnected(err.Error()) {
 			DatabaseConnected = false
 			activeSession.Close()
-			return Error
 		}
 		return Error
 	}
 
 	return Yes
+}
+
+func GetEmail(username string) (int, string) {
+	result := Account{}
+
+	if err := accounts.Find(bson.M{"username": username}).One(&result); err != nil {
+		if err.Error() == "not found" {
+			return No, ""
+		} else if isDisconnected(err.Error()) {
+			DatabaseConnected = false
+			activeSession.Close()
+		}
+		return Error, ""
+	}
+
+	if len(result.Email) > 0 {
+		return Yes, result.Email
+	}
+
+	return NotSet, ""
 }
 
 func VerifyLogin(username string, password string) int {
@@ -87,40 +143,44 @@ func VerifyLogin(username string, password string) int {
 	hash := hex.EncodeToString(hasher.Sum(nil))
 
 	result := Account{}
-	err := accounts.Find(bson.M{"username": username, "hash": hash}).One(&result)
-
-	if err != nil {
+	if err := accounts.Find(bson.M{"username": username, "hash": hash}).One(&result); err != nil {
 		if err.Error() == "not found" {
 			return No
-		} else if err.Error() == "EOF" {
+		} else if isDisconnected(err.Error()) {
 			DatabaseConnected = false
 			activeSession.Close()
-			return Error
 		}
-		fmt.Println("Failed to search database")
 		return Error
 	}
 
+	fmt.Println(result)
 	return Yes
 }
 
-func RegisterAccount(username string, email string, password string) int {
+func RegisterAccount(username string, password string) int {
 	hasher := sha256.New()
 	hasher.Write([]byte(password + passwordSalt))
 	hash := hex.EncodeToString(hasher.Sum(nil))
 
 	result := Account{
 		Username: username,
-		Email: email,
 		Hash: hash,
 	}
-	err := accounts.Insert(result)
 
-	if err != nil {
+	if err := accounts.Insert(result); err != nil {
 		return Error
 	}
 
 	return Yes
+}
+
+
+func isDisconnected(err string) bool {
+	if err == "EOF" || err == "no reachable servers" {
+		return true
+	} else {
+		return false
+	}
 }
 
 func Connect() bool {
