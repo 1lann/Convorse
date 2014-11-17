@@ -42,19 +42,17 @@ var isConnecting bool
 var isChecking bool
 var DatabaseConnected bool
 
-const (
-	Yes        = 1
-	No         = 2
-	Error      = 3
-	Username   = 4
-	Password   = 5
-)
-
 // I know, know. Constant/static password salts are bad :(
 // But they should be sufficient for the purposes of CC
 // If the community grows (or I get hacked), I'll add more
 // security features.
 const passwordSalt = "convorse-password-salt"
+
+const (
+	Disconnected = "EOF"
+	No = "not found"
+	Yes = nil
+)
 
 type Account struct {
 	Username string
@@ -62,26 +60,20 @@ type Account struct {
 	Hash string
 }
 
-func AccountExists(username string) int {
+func AccountExists(username string) error {
 	result := Account{}
 
 	err := accounts.Find(bson.M{"username": username}).One(&result)
 
-	if err != nil {
-		if err.Error() == "not found" {
-			return No
-		} else if err.Error() == "EOF" {
-			DatabaseConnected = false
-			activeSession.Close()
-			return Error
-		}
-		return Error
+	if err != nil && err.Error() == Disconnected {
+		DatabaseConnected = false
+		activeSession.Close()
 	}
 
-	return Yes
+	return err
 }
 
-func VerifyLogin(username string, password string) int {
+func VerifyLogin(username string, password string) error {
 	hasher := sha256.New()
 	hasher.Write([]byte(password + passwordSalt))
 	hash := hex.EncodeToString(hasher.Sum(nil))
@@ -89,22 +81,15 @@ func VerifyLogin(username string, password string) int {
 	result := Account{}
 	err := accounts.Find(bson.M{"username": username, "hash": hash}).One(&result)
 
-	if err != nil {
-		if err.Error() == "not found" {
-			return No
-		} else if err.Error() == "EOF" {
-			DatabaseConnected = false
-			activeSession.Close()
-			return Error
-		}
-		fmt.Println("Failed to search database")
-		return Error
+	if err != nil && err.Error() == Disconnected {
+		DatabaseConnected = false
+		activeSession.Close()
 	}
 
-	return Yes
+	return err
 }
 
-func RegisterAccount(username string, email string, password string) int {
+func RegisterAccount(username string, email string, password string) error {
 	hasher := sha256.New()
 	hasher.Write([]byte(password + passwordSalt))
 	hash := hex.EncodeToString(hasher.Sum(nil))
@@ -114,13 +99,22 @@ func RegisterAccount(username string, email string, password string) int {
 		Email: email,
 		Hash: hash,
 	}
+
 	err := accounts.Insert(result)
 
-	if err != nil {
-		return Error
+	return err
+}
+
+func GetEmail(username string) (string, error) {
+	result := Account{}
+	err := accounts.Find(bson.M{"username": username}).One(&result)
+
+	if err != nil && err.Error() == Disconnected {
+		DatabaseConnected = false
+		activeSession.Close()
 	}
 
-	return Yes
+	return result.Email, err
 }
 
 func Connect() bool {
