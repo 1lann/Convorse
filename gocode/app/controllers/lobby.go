@@ -29,7 +29,7 @@ func (c Lobby) LoginAction(username string, password string) revel.Result {
 
 		if (result == nil) {
 			return c.RenderText("OK")
-		} else if (result == "not found") {
+		} else if (result.Error() == "not found") {
 			c.Validation.Error("Incorrect passsword!").Key("password")
 			c.Validation.Keep()
 			c.FlashParams()
@@ -92,7 +92,7 @@ func (c Lobby) RegisterAction(username string, email string, password string, pa
 
 	exists := database.AccountExists(username)
 
-	if exists == "not found" {
+	if exists.Error() == "not found" {
 		result := database.RegisterAccount(username, email, password)
 		if result == nil {
 			return c.RenderText("Account created!")
