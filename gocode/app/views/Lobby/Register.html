@@ -7,21 +7,33 @@
         <h1>Convorse</h1>
         <h2 class="center-text">Messaging Reimagined for ComputerCraft</h2>
     </div>
+
+    {{if .errors}}
+    <div class="alert alert-danger">
+        {{range $i, $e := .errors}}
+        <p id="error-message">{{$e}}</p>
+        {{end}}
+    </div>
+    {{end}}
+
     <div class="container">
         <h3 class="center-text">Register a new account</h3>
-        <form class="form-horizontal" role="form" action="home" method="post">
+        <form class="form-horizontal" role="form" action="/register" method="post">
             <div id="form-area" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
                 <div class="form-group form-group-lg">
-                    <input type="text" value="" placeholder="Username" class="form-control" required>
+                    <input type="text" value="{{.flash.username}}" placeholder="Username" class="form-control {{errorClass "username" .}}" name="username" required>
+                    {{if .errors.username}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
                 </div>
                 <div class="form-group form-group-lg">
-                    <input type="email" value="" placeholder="Email (Optional)" class="form-control">
+                    <input type="email" value="{{.flash.email}}" placeholder="Email (Optional)" name="email" class="form-control {{errorClass "email" .}}">
+                    {{if .errors.email}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
                 </div>
                 <div class="form-group form-group-lg">
-                    <input type="password" value="" placeholder="Password" class="form-control" required>
+                    <input type="password" value="" placeholder="Password" name="password" class="form-control {{errorClass "password" .}}" required>
+                    {{if .errors.password}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
                 </div>
                 <div class="form-group form-group-lg">
-                    <input type="password" value="" placeholder="Password Again" class="form-control" required>
+                    <input type="password" value="" placeholder="Password Again" name="password_again" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-block btn-lg btn-info btn-fill" value="Register">

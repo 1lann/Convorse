@@ -43,9 +43,11 @@ var isChecking bool
 var DatabaseConnected bool
 
 const (
-	Yes   = 1
-	No    = 2
-	Error = 3
+	Yes        = 1
+	No         = 2
+	Error      = 3
+	Username   = 4
+	Password   = 5
 )
 
 // I know, know. Constant/static password salts are bad :(
@@ -69,6 +71,7 @@ func AccountExists(username string) int {
 		if err.Error() == "not found" {
 			return No
 		} else if err.Error() == "EOF" {
+			DatabaseConnected = false
 			activeSession.Close()
 			return Error
 		}
@@ -90,6 +93,7 @@ func VerifyLogin(username string, password string) int {
 		if err.Error() == "not found" {
 			return No
 		} else if err.Error() == "EOF" {
+			DatabaseConnected = false
 			activeSession.Close()
 			return Error
 		}
@@ -100,9 +104,29 @@ func VerifyLogin(username string, password string) int {
 	return Yes
 }
 
+func RegisterAccount(username string, email string, password string) int {
+	hasher := sha256.New()
+	hasher.Write([]byte(password + passwordSalt))
+	hash := hex.EncodeToString(hasher.Sum(nil))
+
+	result := Account{
+		Username: username,
+		Email: email,
+		Hash: hash,
+	}
+	err := accounts.Insert(result)
+
+	if err != nil {
+		return Error
+	}
+
+	return Yes
+}
+
 func Connect() bool {
 	if !isConnecting {
 		isConnecting = true
+		fmt.Println("Connecting...")
 		session, err := mgo.DialWithTimeout("127.0.0.1", time.Second*3)
 		if err != nil {
 			isConnecting = false

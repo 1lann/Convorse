@@ -9,8 +9,30 @@ body {
 			&:focus {
 				border-color: #2C93FF;
 			}
+
+			&.hasError {
+				border-color: #FF3B30 !important;
+			}
+		}
+
+		.form-control-feedback {
+			position: relative;
+			float: right;
+			top: -25px;
+			right: 15px;
+			line-height: 0px;
+		}
+
+		i.glyphicon {
+			font-size: 18px;
+			color: #FF3B30;
 		}
 	}
+}
+
+.alert #error-message {
+	text-align: center;
+	font-weight: bold;
 }
 
 #top-bar {

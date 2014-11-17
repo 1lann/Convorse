@@ -5,6 +5,24 @@ body .form-group-lg input {
 body .form-group-lg input:focus {
   border-color: #2C93FF;
 }
+body .form-group-lg input.hasError {
+  border-color: #FF3B30 !important;
+}
+body .form-group-lg .form-control-feedback {
+  position: relative;
+  float: right;
+  top: -25px;
+  right: 15px;
+  line-height: 0px;
+}
+body .form-group-lg i.glyphicon {
+  font-size: 18px;
+  color: #FF3B30;
+}
+.alert #error-message {
+  text-align: center;
+  font-weight: bold;
+}
 #top-bar {
   padding-bottom: 31px;
   padding-top: 1px;
