@@ -29,7 +29,7 @@ func (c Lobby) LoginAction(username string, password string) revel.Result {
 
 		if (result == nil) {
 			return c.RenderText("OK")
-		} else if (result.Error() == "not found") {
+		} else if (result.Error() == database.notFound) {
 			c.Validation.Error("Incorrect passsword!").Key("password")
 			c.Validation.Keep()
 			c.FlashParams()
@@ -37,7 +37,7 @@ func (c Lobby) LoginAction(username string, password string) revel.Result {
 		} else {
 			return c.RenderTemplate("errors/database."+c.Request.Format)
 		}
-	} else if accountExists.Error() == "not found" {
+	} else if accountExists.Error() == database.notFound {
 		c.Validation.Error("That user does not exist!").Key("username")
 		c.Validation.Keep()
 		c.FlashParams()
@@ -92,14 +92,14 @@ func (c Lobby) RegisterAction(username string, email string, password string, pa
 
 	exists := database.AccountExists(username)
 
-	if exists.Error() == "not found" {
+	if exists.Error() == database.notFound {
 		result := database.RegisterAccount(username, email, password)
 		if result == nil {
 			return c.RenderText("Account created!")
 		} else {
 			return c.RenderTemplate("errors/database."+c.Request.Format)
 		}
-	} else if exists == nil {
+	} else if exists.Error() == nil {
 		c.Validation.Error("Username already taken!").Key("username")
 		c.Validation.Keep()
 		c.FlashParams()
