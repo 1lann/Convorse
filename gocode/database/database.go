@@ -49,8 +49,8 @@ var DatabaseConnected bool
 const passwordSalt = "convorse-password-salt"
 
 const (
-	disconnected = "EOF"
-	notFound = "not found"
+	Disconnected = "EOF"
+	NotFound = "not found"
 )
 
 type Account struct {
@@ -64,7 +64,7 @@ func AccountExists(username string) error {
 
 	err := accounts.Find(bson.M{"username": username}).One(&result)
 
-	if err != nil && err.Error() == disconnected {
+	if err != nil && err.Error() == Disconnected {
 		DatabaseConnected = false
 		activeSession.Close()
 	}
@@ -80,7 +80,7 @@ func VerifyLogin(username string, password string) error {
 	result := Account{}
 	err := accounts.Find(bson.M{"username": username, "hash": hash}).One(&result)
 
-	if err != nil && err.Error() == disconnected {
+	if err != nil && err.Error() == Disconnected {
 		DatabaseConnected = false
 		activeSession.Close()
 	}
@@ -108,7 +108,7 @@ func GetEmail(username string) (string, error) {
 	result := Account{}
 	err := accounts.Find(bson.M{"username": username}).One(&result)
 
-	if err != nil && err.Error() == disconnected {
+	if err != nil && err.Error() == Disconnected {
 		DatabaseConnected = false
 		activeSession.Close()
 	}
