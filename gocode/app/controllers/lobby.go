@@ -92,18 +92,18 @@ func (c Lobby) RegisterAction(username string, email string, password string, pa
 
 	exists := database.AccountExists(username)
 
-	if exists.Error() == database.NotFound {
+	if exists == nil {
+		c.Validation.Error("Username already taken!").Key("username")
+		c.Validation.Keep()
+		c.FlashParams()
+		return c.Redirect("/register")
+	else if exists.Error() == database.NotFound {
 		result := database.RegisterAccount(username, email, password)
 		if result == nil {
 			return c.RenderText("Account created!")
 		} else {
 			return c.RenderTemplate("errors/database."+c.Request.Format)
 		}
-	} else if exists == nil {
-		c.Validation.Error("Username already taken!").Key("username")
-		c.Validation.Keep()
-		c.FlashParams()
-		return c.Redirect("/register")
 	} else {
 		return c.RenderTemplate("errors/database."+c.Request.Format)
 	}
