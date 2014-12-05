@@ -1,9 +1,9 @@
-//out: lobby.css
+//out: setup.css
 
 body {
 	.form-group-lg {
-		input {
-			font-size: 20px;
+		input, select {
+			font-size: 16px;
 			height: 50px;
 
 			&:focus {
@@ -13,6 +13,10 @@ body {
 			&.hasError {
 				border-color: #FF3B30 !important;
 			}
+		}
+
+		select {
+			font-size: 16px;
 		}
 
 		.form-control-feedback {
@@ -34,6 +38,7 @@ body {
 	text-align: center;
 	font-weight: bold;
 }
+
 
 #top-bar {
 	padding-bottom: 31px;
@@ -77,16 +82,15 @@ body {
 	}
 
 	h3 {
-		margin-bottom: 25px;
 		font-weight: 300;
+		margin-bottom: 20px;
 	}
 
-	a {
-		font-size: 16px;
+	.subheading {
+		font-weight: 400;
 	}
 
-	#forgot {
-		display: inline-block;
-		margin-top: 5px;
+	#note {
+		color: #999999;
 	}
 }

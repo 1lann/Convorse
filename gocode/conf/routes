@@ -6,6 +6,11 @@ module:testrunner
 
 GET     /                                       Lobby.Index
 GET		/register								Lobby.Register
+GET		/login									Lobby.Index
+
+# Debugging
+GET		/home									Main.Home
+GET		/setup									Setup.Index
 
 POST	/login									Lobby.LoginAction
 POST	/register								Lobby.RegisterAction

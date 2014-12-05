@@ -1,0 +1,87 @@
+{{set . "title" "Welcome"}}
+{{append . "moreStyles" "setup.css"}}
+{{template "header.html" .}}
+
+<body>
+    <div id="top-bar">
+        <div id="title-container">
+            <h1>Convorse</h1><p id="version">alpha</p>
+        </div>
+        <h2 class="center-text">Messaging Reimagined for ComputerCraft</h2>
+    </div>
+
+    {{if .errors}}
+    <div class="alert alert-danger">
+        {{range $i, $e := .errors}}
+        <p id="error-message">{{$e}}</p>
+        {{end}}
+    </div>
+    {{end}}
+
+    <div class="container">
+        <h3 class="center-text">Personalise your experience</h3>
+        <form class="form-horizontal" role="form" action="/setup" method="post">
+            <div id="form-area" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+                <p class="subheading">Add your email (We use <a href="https://gravatar.com/" target="_blank">Gravatar</a>)</p>
+                <div class="form-group form-group-lg">
+                    <input type="email" value="" placeholder="Email (Optional)" name="email" class="form-control {{errorClass "password" .}}" required>
+                    {{if .errors.password}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
+                </div>
+                <p class="subheading">Set your timezone</p>
+                <div class="form-group form-group-lg">
+                    <select class="form-control">
+                        <option>UTC -12:00</option>
+                        <option>UTC -11:00</option>
+                        <option>UTC -10:00 Papeete, Honolulu</option>
+                        <option>UTC -9:30</option>
+                        <option>UTC -9:00 Anchorage</option>
+                        <option>UTC -8:00 California, Vancouver</option>
+                        <option>UTC -7:00 Phoenix, Calgary, Utah, Wyoming</option>
+                        <option>UTC -6:00 (CST) Chicago, Mexico City, San José, Winnipeg</option>
+                        <option>UTC -5:00 (EST) New York, Toronto</option>
+                        <option>UTC -4:30 Venezuela</option>
+                        <option>UTC -4:00 Santiago, Halifax</option>
+                        <option>UTC -3:00 Buenos Aires, São Paulo</option>
+                        <option>UTC -2:00</option>
+                        <option>UTC -1:00</option>
+                        <option>UTC (GMT) London, Dublin</option>
+                        <option>UTC +1:00 Berlin, Brussels, Madrid, Paris, Rome</option>
+                        <option>UTC +2:00 Athens, Cairo, Helsinki, Johannesburg</option>
+                        <option>UTC +3:00 Moscow</option>
+                        <option>UTC +3:30 Tehran</option>
+                        <option>UTC +4:00 Dubai</option>
+                        <option>UTC +4:30 Kabul</option>
+                        <option>UTC +5:00</option>
+                        <option>UTC +5:30 Delhi</option>
+                        <option>UTC +5:45 Nepal, Kathmandu</option>
+                        <option>UTC +6:00 Dhaka, Novosibirsk</option>
+                        <option>UTC +6:30</option>
+                        <option>UTC +7:00 Jakarta, Bangkok, Hanoi</option>
+                        <option>UTC +8:00 Perth, Beijing, Singapore, Kuala Lumpur, Denpasar</option>
+                        <option>UTC +8:45</option>
+                        <option>UTC +9:00 Seoul, Tokyo</option>
+                        <option>UTC +9:30 Adelaide</option>
+                        <option>UTC +10:00 Sydney, Canberra, Vladivostok</option>
+                        <option>UTC +10:30</option>
+                        <option>UTC +11:00</option>
+                        <option>UTC +11:30</option>
+                        <option>UTC +12:00 Auckland, Fiji</option>
+                        <option>UTC +12:45</option>
+                        <option>UTC +13:00</option>
+                        <option>UTC +14:00</option>
+                    </select>
+                </div>
+                <p id="note">You can change these settings later at any time</p>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-block btn-lg btn-info btn-fill" value="Continue">
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer>
+        <hr>
+        <small>Made with <span class="glyphicon glyphicon-heart"></span> by 1lann, MagneticHamster and GravityScore</small><br>
+        <small id="fork-me"><a href="https://github.com/1lann/Convorse" target="_blank">Fork me on GitHub</a></small>
+    </footer>
+</body>
+</html>
