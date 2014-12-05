@@ -1,8 +1,12 @@
-# Welcome to Revel
+# Convorse
 
 ## Getting Started
 
-A high-productivity web framework for the [Go language](http://www.golang.org/).
+Convorse is written with [Revel](http://revel.github.io), A high-productivity web framework for the [Go language](http://www.golang.org/).
+
+Place this gocode directory in your `$GOPATH/src/` and rename it to convorse.
+
+What the file structure should be like: `$GOPATH/src/convorse/app/views/...`
 
 ### Start the web server:
 
@@ -10,9 +14,9 @@ A high-productivity web framework for the [Go language](http://www.golang.org/).
 
    Run with <tt>--help</tt> for options.
 
-### Go to http://localhost:9000/ and you'll see:
+### Go to http://localhost:9000/
 
-"It works"
+And you should see the convorse desktop login screen
 
 ### Description of Contents
 
@@ -33,7 +37,8 @@ The default directory structure of a generated Revel application:
         css             CSS files
         js              Javascript files
         images          Image files
-      database          Database package
+      database          Database wrapper
+      serialize         ComputerCraft serializer
 
 app
 
@@ -45,31 +50,3 @@ conf
 
     * app.conf, the main configuration file for the application, which contains standard configuration parameters
     * routes, the routes definition file.
-
-
-messages
-
-    The messages directory contains all localized message files.
-
-public
-
-    Resources stored in the public directory are static assets that are served directly by the Web server. Typically it is split into three standard sub-directories for images, CSS stylesheets and JavaScript files.
-
-    The names of these directories may be anything; the developer need only update the routes.
-
-test
-
-    Tests are kept in the tests directory. Revel provides a testing framework that makes it easy to write and run functional tests against your application.
-
-### Follow the guidelines to start developing your application:
-
-* The README file created within your application.
-* The [Getting Started with Revel](http://revel.github.io/tutorial/index.html).
-* The [Revel guides](http://revel.github.io/manual/index.html).
-* The [Revel sample apps](http://revel.github.io/samples/index.html).
-* The [API documentation](http://revel.github.io/docs/godoc/index.html).
-
-## Contributing
-We encourage you to contribute to Revel! Please check out the [Contributing to Revel
-guide](https://github.com/revel/revel/blob/master/CONTRIBUTING.md) for guidelines about how
-to proceed. [Join us](https://groups.google.com/forum/#!forum/revel-framework)!
