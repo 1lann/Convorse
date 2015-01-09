@@ -23,15 +23,15 @@
         <form class="form-horizontal" role="form" action="/register" method="post">
             <div id="form-area" class="col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
                 <div class="form-group form-group-lg">
-                    <input type="text" value="{{.flash.username}}" placeholder="Username" class="form-control {{errorClass "username" .}}" name="username" required>
-                    {{if .errors.username}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
+                    <input type="text" value="{{.flash.a_username}}" placeholder="Username" class="form-control {{errorClass "a_username" .}}" name="a_username" required>
+                    {{if .errors.a_username}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
                 </div>
                 <div class="form-group form-group-lg">
-                    <input type="password" value="" placeholder="Password" name="password" class="form-control {{errorClass "password" .}}" required>
-                    {{if .errors.password}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
+                    <input type="password" value="" placeholder="Password" name="b_password" class="form-control {{errorClass "b_password" .}}" required>
+                    {{if .errors.b_password}}<i class="glyphicon glyphicon-remove form-control-feedback"></i>{{end}}
                 </div>
                 <div class="form-group form-group-lg">
-                    <input type="password" value="" placeholder="Password Again" name="password_again" class="form-control" required>
+                    <input type="password" value="" placeholder="Password Again" name="c_password_again" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-block btn-lg btn-info btn-fill" value="Register">
